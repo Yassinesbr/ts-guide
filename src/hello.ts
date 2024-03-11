@@ -1,3 +1,5 @@
+import { capitalize } from "./stringUtils";
+
 // Declare a variable temperature of type number and assign it a value.
 // Create a variable welcomeMessage of type string that contains a greeting.
 // Make a variable isLoggedIn of type boolean to check if a user is logged in.
@@ -81,15 +83,15 @@ const createVehicle = (vehicle: Vehicle): Vehicle => {
 // Extend the Person interface to include an optional property email.
 // Implement a function updatePerson that takes a Person object and an object with updates to some of the person's properties. The function should return the updated person object.
 
-// interface Person {
-//   name: string;
-//   age: number;
-//   email?: string;
-// }
+interface Person2 {
+  name: string;
+  age: number;
+  email?: string;
+}
 
-// const updatePerson = (person: Person, updates: Partial<Person>): Person => {
-//   return { ...person, ...updates };
-// };
+const updatePerson = (person: Person2, updates: Partial<Person2>): Person2 => {
+  return { ...person, ...updates };
+};
 
 // Create an interface Circle with readonly properties centerX, centerY, and radius.
 // Write a function moveCircle that attempts to modify the centerX and centerY properties of a Circle object. Observe the TypeScript error
@@ -219,66 +221,68 @@ const customer: Customer = {
 // Create a module stringUtils with a function capitalize that takes a string and returns it with the first letter capitalized.
 // Import and use it in another file.
 
-import { capitalize } from "./stringUtils";
 capitalize("hello");
 
-// Define a namespace Calculator with a class BasicCalculator and use it in another file without importing.
-// const calc = new Calculator.BasicCalculator();
-// calc.add(1, 2);
-// calc.subtract(2, 1);
+const calc = new Calculator.BasicCalculator();
+calc.add(1, 2);
+calc.subtract(2, 1);
 
 //Create a decorator @logged that logs whenever a new instance of a class is created.
 
-// function logged(constructor: Function) {
-//   console.log(`Creating a new instance of ${constructor}`);
-// }
+function logged(constructor: Function) {
+  console.log(`Creating a new instance of ${constructor}`);
+}
 
-// @logged
-// class Test {}
+//@logged
+class Test {}
 
 // Implement a method decorator @format that formats the return value of greet method as uppercase.
 
-// function enumerable(value: boolean) {
-//   return function (
-//     target: any,
-//     propertyKey: string,
-//     descriptor: PropertyDescriptor
-//   ) {
-//     descriptor.enumerable = value;
-//   };
-// }
+function enumerable(value: boolean) {
+  return function (
+    target: any,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) {
+    descriptor.enumerable = value;
+  };
+}
 
-//////  TO UNDERSTAND //////
+function format(
+  target: any,
+  propertyKey: string,
+  descriptor: PropertyDescriptor
+) {
+  const originalMethod = descriptor.value;
 
-// function format(
-//   target: any,
-//   propertyKey: string,
-//   descriptor: PropertyDescriptor
-// ) {
-//   const originalMethod = descriptor.value;
-//   descriptor.value = function () {
-//     const result = originalMethod.apply(this);
-//     return result.toUpperCase();
-//   };
-// }
+  descriptor.value = function (...args: any[]) {
+    const result = originalMethod.apply(this, args);
 
-//////////////////////////
+    if (typeof result === "string") {
+      return result.toUpperCase();
+    }
 
-// class Greeter {
-//   greeting: string;
-//   constructor(message: string) {
-//     this.greeting = message;
-//   }
+    return result;
+  };
 
-//   @enumerable(false)
-//   @format
-//   greet() {
-//     return "Hello, " + this.greeting;
-//   }
-// }
+  return descriptor;
+}
 
-// const greeter = new Greeter("world");
-// console.log(greeter.greet());
+class Greeter {
+  greeting: string;
+  constructor(message: string) {
+    this.greeting = message;
+  }
+
+  @enumerable(false)
+  @format
+  greet() {
+    return "Hello, " + this.greeting;
+  }
+}
+
+const greeter = new Greeter("world");
+console.log(greeter.greet());
 
 // Use the Partial utility type to write a function that updates only certain fields of a Todo object.
 // Apply the Readonly utility type to make a User object that should not be modified after creation.
