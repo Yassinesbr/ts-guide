@@ -6,5 +6,5 @@
     "experimentalDecorators": true,
     "strictNullChecks": true
   },
-  "include": ["src", "hello.js"]
+  "include": ["src"]
 }
